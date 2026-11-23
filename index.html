@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Lucía · Cuatro Años Juntos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-night-top: #040711;
+      --bg-night-bottom: #0b142c;
+      --gold-primary: #d4af37;
+      --gold-light: #f6e7b2;
+      --gold-dim: rgba(212, 175, 55, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+      background-color: #040711;
+      color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .font-serif-elegant {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    /* Canvas principal fijo en el fondo */
+    #universe-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Tarjetas de capítulos con efecto cristal nocturno */
+    .chapter-card {
+      background: linear-gradient(145deg, rgba(11, 20, 44, 0.72), rgba(5, 9, 22, 0.85));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(246, 231, 178, 0.12);
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .chapter-card:hover {
+      border-color: rgba(212, 175, 55, 0.55);
+      box-shadow: 0 28px 70px -12px rgba(0, 0, 0, 0.85), 0 0 30px rgba(212, 175, 55, 0.12);
+    }
+
+    /* Animación suave de entrada al hacer scroll */
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1), transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Botón dorado principal con brillo sutil */
+    .btn-gold-glow {
+      background: linear-gradient(135deg, #c59b27 0%, #f1d98a 50%, #c59b27 100%);
+      background-size: 200% auto;
+      color: #070c1c;
+      box-shadow: 0 0 28px rgba(212, 175, 55, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.7);
+      transition: all 0.45s ease;
+    }
+
+    .btn-gold-glow:hover {
+      background-position: right center;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 42px rgba(246, 231, 178, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+    }
+
+    .btn-gold-glow:active {
+      transform: scale(0.98);
+    }
+
+    /* Indicador scroll hero */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); opacity: 0.75; }
+      50% { transform: translateY(8px); opacity: 1; }
+    }
+    .animate-float-slow {
+      animation: floatSlow 2.8s ease-in-out infinite;
+    }
+
+    /* Estrellas de la constelación superior */
+    .constellation-node {
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .constellation-node.active {
+      transform: scale(1.25);
+      filter: drop-shadow(0 0 8px rgba(246, 231, 178, 0.95));
+    }
+
+    /* Frases de la transición cinematográfica */
+    .story-phrase {
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+      filter: blur(4px);
+      transition: opacity 1.1s ease, transform 1.1s ease, filter 1.1s ease;
+    }
+    .story-phrase.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
+    }
+
+    /* Tarjeta 3D VIP del Acuario de Sevilla */
+    .ticket-perspective {
+      perspective: 1400px;
+    }
+
+    .ticket-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.14s ease-out;
+      will-change: transform;
+      background: linear-gradient(135deg, rgba(6, 34, 58, 0.92) 0%, rgba(10, 56, 86, 0.90) 48%, rgba(4, 24, 44, 0.95) 100%);
+      border: 1.5px solid rgba(246, 231, 178, 0.55);
+      box-shadow:
+        0 30px 70px -15px rgba(0, 10, 24, 0.9),
+        0 0 45px rgba(56, 189, 248, 0.18),
+        inset 0 0 24px rgba(212, 175, 55, 0.14);
+    }
+
+    /* Capa de brillo holográfico sobre la entrada */
+    .ticket-sheen {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: radial-gradient(
+        circle at var(--mx, 50%) var(--my, 50%),
+        rgba(246, 231, 178, 0.28) 0%,
+        rgba(125, 211, 252, 0.12) 32%,
+        transparent 68%
+      );
+      mix-blend-mode: screen;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Muescas laterales tipo ticket físico */
+    .ticket-notch-left, .ticket-notch-right {
+      position: absolute;
+      top: 66%;
+      width: 24px;
+      height: 24px;
+      border-radius: 9999px;
+      background-color: #05223a;
+      border: 1px solid rgba(246, 231, 178, 0.35);
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+    .ticket-notch-left { left: -13px; }
+    .ticket-notch-right { right: -13px; }
+
+    /* Ocultar scrollbar durante transición cinematográfica */
+    body.locked-scroll {
+      overflow: hidden;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-300/30 selection:text-amber-100">
+
+  <!-- Lienzo interactivo de cielo estrellado -> profundidad marina -->
+  <canvas id="universe-canvas"></canvas>
+
+  <!-- Barra superior fija: Constelación de progreso + Control de música -->
+  <header id="top-hud" class="fixed top-0 left-0 right-0 z-40 px-4 py-3 sm:px-8 sm:py-4 transition-opacity duration-700">
+    <div class="max-w-5xl mx-auto flex items-center justify-between gap-3 bg-[#060b1c]/70 backdrop-blur-md border border-amber-200/15 rounded-full px-4 py-2.5 sm:px-6 shadow-lg">
+      
+      <!-- Identificador sutil -->
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="inline-block w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_8px_#fcd34d]"></span>
+        <span class="font-serif-elegant italic text-amber-100/90 text-sm sm:text-base tracking-wide">Lucía · IV</span>
+      </div>
+
+      <!-- Constelación de progreso de 4 años -->
+      <div class="flex-1 max-w-xs sm:max-w-md mx-2 sm:mx-6" aria-label="Progreso de nuestros 4 años">
+        <div class="relative flex items-center justify-between">
+          <!-- Línea base apagada -->
+          <div class="absolute left-2 right-2 top-1/2 -translate-y-1/2 h-[1.5px] bg-amber-200/15 rounded-full"></div>
+          <!-- Línea dorada de progreso -->
+          <div id="constellation-line" class="absolute left-2 top-1/2 -translate-y-1/2 h-[2px] bg-gradient-to-r from-amber-400 via-amber-200 to-amber-300 rounded-full shadow-[0_0_10px_rgba(251,191,36,0.8)] transition-all duration-300" style="width: 0%;"></div>
+
+          <!-- 4 Estrellas de los 4 años -->
+          <button type="button" data-target="year-1" class="constellation-node relative z-10 flex flex-col items-center group focus:outline-none p-1" title="Año 1">
+            <svg id="star-node-1" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-200/35 transition-colors duration-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/>
+            </svg>
+            <span class="text-[9px] sm:text-[10px] uppercase tracking-widest text-amber-100/50 mt-0.5 hidden xs:block">I</span>
+          </button>
+
+          <button type="button" data-target="year-2" class="constellation-node relative z-10 flex flex-col items-center group focus:outline-none p-1" title="Año 2">
+            <svg id="star-node-2" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-200/35 transition-colors duration-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/>
+            </svg>
+            <span class="text-[9px] sm:text-[10px] uppercase tracking-widest text-amber-100/50 mt-0.5 hidden xs:block">II</span>
+          </button>
+
+          <button type="button" data-target="year-3" class="constellation-node relative z-10 flex flex-col items-center group focus:outline-none p-1" title="Año 3">
+            <svg id="star-node-3" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-200/35 transition-colors duration-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/>
+            </svg>
+            <span class="text-[9px] sm:text-[10px] uppercase tracking-widest text-amber-100/50 mt-0.5 hidden xs:block">III</span>
+          </button>
+
+          <button type="button" data-target="year-4" class="constellation-node relative z-10 flex flex-col items-center group focus:outline-none p-1" title="Año 4">
+            <svg id="star-node-4" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-200/35 transition-colors duration-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/>
+            </svg>
+            <span class="text-[9px] sm:text-[10px] uppercase tracking-widest text-amber-100/50 mt-0.5 hidden xs:block">IV</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Botón de música ambiental -->
+      <button id="audio-toggle" type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-300/30 bg-amber-200/5 hover:bg-amber-200/15 text-amber-100 text-xs sm:text-sm transition-all shrink-0 focus:outline-none" aria-label="Activar o pausar música ambiental">
+        <span id="audio-icon" class="w-4 h-4 flex items-center justify-center text-amber-300">
+          <!-- Icono sonido apagado -->
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/>
+          </svg>
+        </span>
+        <span id="audio-label" class="hidden sm:inline font-light tracking-wide">Música</span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL: NOCHE ESTRELLADA Y LOS 4 CAPÍTULOS -->
+  <main id="story-main" class="relative z-10 transition-opacity duration-1000">
+    
+    <!-- HERO SECTION -->
+    <section class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-24 pb-16 relative">
+      <div class="max-w-3xl mx-auto space-y-6 sm:space-y-8">
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-amber-300/25 bg-amber-300/5 text-amber-200/90 text-xs sm:text-sm tracking-[0.22em] uppercase">
+          <span>Nuestro 4.º Aniversario</span>
+        </div>
+
+        <h1 class="font-serif-elegant text-5xl sm:text-7xl md:text-8xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-amber-100 via-amber-200 to-amber-400/90 leading-[1.08] py-1">
+          Para Lucía
+        </h1>
+
+        <p class="font-serif-elegant italic text-2xl sm:text-3xl md:text-4xl text-slate-200/90 font-normal">
+          Cuatro años iluminando cada uno de mis días
+        </p>
+
+        <p class="max-w-xl mx-auto text-sm sm:text-base md:text-lg text-slate-300/80 font-light leading-relaxed pt-2">
+          Dicen que el tiempo vuela cuando eres feliz, pero contigo cada instante se queda grabado como una estrella en el cielo. Desliza despacio y recorramos juntos lo que hemos construido.
+        </p>
+
+        <p class="text-xs text-amber-200/50 tracking-widest uppercase pt-2">
+          ✦ Toca o mueve el dedo por el cielo para pedir un deseo ✦
+        </p>
+      </div>
+
+      <!-- Invitación a deslizar -->
+      <a href="#year-1" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-amber-200/75 hover:text-amber-200 transition-colors animate-float-slow p-3">
+        <span class="text-[11px] uppercase tracking-[0.25em]">Comenzar</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- CAPÍTULO I: AÑO 1 -->
+    <section id="year-1" class="min-h-[88vh] flex items-center justify-center px-5 sm:px-8 py-20 sm:py-28">
+      <article class="reveal-section chapter-card w-full max-w-2xl rounded-3xl p-7 sm:p-12 md:p-14 relative overflow-hidden">
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <span class="text-xs sm:text-sm uppercase tracking-[0.25em] text-amber-300/90 font-medium">Capítulo I · Primer Año</span>
+          <span class="text-amber-300/70 text-lg">✦</span>
+        </div>
+
+        <h2 class="font-serif-elegant text-3xl sm:text-5xl text-amber-100 font-semibold leading-tight mb-6">
+          La chispa donde empezó todo
+        </h2>
+
+        <div class="w-16 h-[1px] bg-gradient-to-r from-amber-300/80 to-transparent mb-7"></div>
+
+        <div class="space-y-5 text-slate-200/90 text-base sm:text-lg font-light leading-relaxed">
+          <p>
+            Todavía recuerdo esa sensación tan bonita del principio: las primeras miradas que duraban un segundo más de la cuenta, los nervios antes de vernos y las ganas constantes de saber qué estabas pensando.
+          </p>
+          <p>
+            Durante nuestro primer año fuimos descubriendo poco a poco nuestro propio lenguaje. Sin darnos cuenta, tus mensajes se convirtieron en mi momento favorito del día y tu sonrisa en el lugar al que siempre quería volver.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- CAPÍTULO II: AÑO 2 -->
+    <section id="year-2" class="min-h-[88vh] flex items-center justify-center px-5 sm:px-8 py-20 sm:py-28">
+      <article class="reveal-section chapter-card w-full max-w-2xl rounded-3xl p-7 sm:p-12 md:p-14 relative overflow-hidden">
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <span class="text-xs sm:text-sm uppercase tracking-[0.25em] text-amber-300/90 font-medium">Capítulo II · Segundo Año</span>
+          <span class="text-amber-300/70 text-lg">✦ ✦</span>
+        </div>
+
+        <h2 class="font-serif-elegant text-3xl sm:text-5xl text-amber-100 font-semibold leading-tight mb-6">
+          Construyendo nuestro refugio
+        </h2>
+
+        <div class="w-16 h-[1px] bg-gradient-to-r from-amber-300/80 to-transparent mb-7"></div>
+
+        <div class="space-y-5 text-slate-200/90 text-base sm:text-lg font-light leading-relaxed">
+          <p>
+            En el segundo año la ilusión inicial se transformó en algo todavía más profundo: la complicidad verdadera. Aprendimos a entendernos con solo mirarnos y a convertir hasta los planes más sencillos en recuerdos inolvidables.
+          </p>
+          <p>
+            Con nuestras bromas internas, nuestras charlas infinitas y esa calma tan especial que siento cuando estoy a tu lado, entendí que ya no eras solo alguien a quien quería: te habías convertido en mi hogar.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- CAPÍTULO III: AÑO 3 -->
+    <section id="year-3" class="min-h-[88vh] flex items-center justify-center px-5 sm:px-8 py-20 sm:py-28">
+      <article class="reveal-section chapter-card w-full max-w-2xl rounded-3xl p-7 sm:p-12 md:p-14 relative overflow-hidden">
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <span class="text-xs sm:text-sm uppercase tracking-[0.25em] text-amber-300/90 font-medium">Capítulo III · Tercer Año</span>
+          <span class="text-amber-300/70 text-lg">✦ ✦ ✦</span>
+        </div>
+
+        <h2 class="font-serif-elegant text-3xl sm:text-5xl text-amber-100 font-semibold leading-tight mb-6">
+          Caminar de la mano, pase lo que pase
+        </h2>
+
+        <div class="w-16 h-[1px] bg-gradient-to-r from-amber-300/80 to-transparent mb-7"></div>
+
+        <div class="space-y-5 text-slate-200/90 text-base sm:text-lg font-light leading-relaxed">
+          <p>
+            El tercer año nos enseñó lo que significa ser un verdadero equipo. Celebramos juntos cada alegría y, en los días más grises o difíciles, supimos sostenernos con paciencia, cariño y apoyo incondicional.
+          </p>
+          <p>
+            Ahí confirmé lo que ya sabía en el fondo de mi corazón: que no importa lo complejo que se ponga el camino, mientras sea contigo a mi lado, todo merece la pena.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- CAPÍTULO IV: AÑO 4 Y BOTÓN DE REVELACIÓN -->
+    <section id="year-4" class="min-h-[95vh] flex items-center justify-center px-5 sm:px-8 py-20 sm:py-28">
+      <article class="reveal-section chapter-card w-full max-w-2xl rounded-3xl p-7 sm:p-12 md:p-14 relative overflow-hidden text-center">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <span class="text-xs sm:text-sm uppercase tracking-[0.25em] text-amber-300/90 font-medium">Capítulo IV · Cuarto Año</span>
+        </div>
+
+        <h2 class="font-serif-elegant text-3xl sm:text-5xl text-amber-100 font-semibold leading-tight mb-6">
+          Cuatro años contigo y toda una vida por descubrir
+        </h2>
+
+        <div class="w-20 h-[1px] bg-gradient-to-r from-transparent via-amber-300/80 to-transparent mx-auto mb-7"></div>
+
+        <div class="space-y-5 text-slate-200/90 text-base sm:text-lg font-light leading-relaxed text-left sm:text-center">
+          <p>
+            Hoy miro estos cuatro años atrás y siento un orgullo inmenso por todo lo que somos, por cómo hemos crecido juntos y por cada pequeña historia que solo nos pertenece a nosotros.
+          </p>
+          <p>
+            Gracias por tu luz, por tu ternura y por hacerme tan feliz, Lucía. Y como los mejores recuerdos siempre están por venir, he preparado algo muy especial para seguir sumando momentos juntos...
+          </p>
+        </div>
+
+        <div class="pt-10 pb-2">
+          <button id="discover-btn" type="button" class="btn-gold-glow inline-flex items-center justify-center gap-3 px-8 py-4 sm:px-10 sm:py-4 rounded-full font-semibold text-base sm:text-lg tracking-wide cursor-pointer focus:outline-none">
+            <span>Descubrir tu regalo</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- CAPA DE TRANSICIÓN CINEMATOGRÁFICA (~15.5 SEGUNDOS) -->
+  <div id="cinematic-overlay" class="fixed inset-0 z-30 pointer-events-none hidden flex-col items-center justify-center px-6 text-center">
+    <div class="max-w-2xl mx-auto relative min-h-[140px] flex items-center justify-center">
+      <p id="phrase-1" class="story-phrase font-serif-elegant italic text-2xl sm:text-4xl md:text-5xl text-amber-100 leading-snug drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+        "Hay lugares que solo tienen sentido si los miro contigo..."
+      </p>
+      <p id="phrase-2" class="story-phrase absolute inset-x-0 font-serif-elegant italic text-2xl sm:text-4xl md:text-5xl text-sky-100 leading-snug drop-shadow-[0_4px_24px_rgba(0,15,35,0.9)]">
+        "Un mundo escondido, lleno de calma y de vida..."
+      </p>
+      <p id="phrase-3" class="story-phrase absolute inset-x-0 font-serif-elegant italic text-2xl sm:text-4xl md:text-5xl text-cyan-100 leading-snug drop-shadow-[0_4px_24px_rgba(0,15,35,0.9)]">
+        "Donde el tiempo parece flotar..."
+      </p>
+      <p id="phrase-4" class="story-phrase absolute inset-x-0 font-serif-elegant italic text-2xl sm:text-4xl md:text-5xl text-amber-100 leading-snug drop-shadow-[0_4px_24px_rgba(0,15,35,0.9)]">
+        "Prepárate para sumergirte en nuestra próxima aventura..."
+      </p>
+    </div>
+  </div>
+
+  <!-- FASE 5: REVELACIÓN FINAL DEL PASE AL ACUARIO DE SEVILLA -->
+  <section id="final-reveal" class="fixed inset-0 z-40 hidden overflow-y-auto px-4 py-8 sm:px-6 sm:py-12">
+    <div class="min-h-full flex flex-col items-center justify-center max-w-xl mx-auto">
+      
+      <!-- Encabezado de celebración -->
+      <div id="reveal-header" class="text-center mb-6 sm:mb-8 opacity-0 translate-y-4 transition-all duration-1000">
+        <span class="inline-block px-4 py-1 rounded-full bg-cyan-300/10 border border-cyan-200/30 text-cyan-200 text-xs uppercase tracking-[0.24em] mb-3">
+          ¡Feliz 4.º Aniversario, mi amor!
+        </span>
+        <h2 class="font-serif-elegant text-3xl sm:text-5xl text-white font-semibold drop-shadow-md">
+          Nuestra próxima aventura
+        </h2>
+      </div>
+
+      <!-- Tarjeta 3D Interactiva: Pase Especial Acuario de Sevilla -->
+      <div id="ticket-wrapper" class="ticket-perspective w-full opacity-0 scale-95 transition-all duration-1000 delay-200">
+        <div id="ticket-card" class="ticket-3d relative rounded-3xl p-6 sm:p-9 overflow-hidden select-none">
+          
+          <!-- Brillo dinámico 3D -->
+          <div id="ticket-sheen" class="ticket-sheen"></div>
+
+          <!-- Muescas laterales de entrada -->
+          <div class="ticket-notch-left"></div>
+          <div class="ticket-notch-right"></div>
+
+          <!-- Cabecera del pase -->
+          <div class="relative z-10 flex items-start justify-between gap-4 border-b border-amber-200/20 pb-5">
+            <div>
+              <p class="text-[11px] sm:text-xs uppercase tracking-[0.28em] text-amber-300 font-semibold">
+                Pase Especial · 4.º Aniversario
+              </p>
+              <h3 class="font-serif-elegant text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-200 to-cyan-200 mt-1 tracking-wide">
+                ACUARIO DE SEVILLA
+              </h3>
+            </div>
+            <!-- Emblema marino/dorado SVG -->
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-300/10 border border-amber-300/35 flex items-center justify-center shrink-0 text-amber-200 shadow-inner">
+              <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2 15c2.5-2 5-2 7.5 0s5 2 7.5 0 3.5-1.5 5 0M2 19c2.5-2 5-2 7.5 0s5 2 7.5 0 3.5-1.5 5 0"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c3.5 0 6.5-2 8-4-1.5-2-4.5-4-8-4S5.5 5 4 7c1.5 2 4.5 4 8 4z"/>
+                <circle cx="15.5" cy="6.8" r="0.8" fill="currentColor"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Cuerpo central con datos del titular -->
+          <div class="relative z-10 py-6 space-y-5">
+            <div>
+              <span class="block text-[11px] uppercase tracking-[0.2em] text-cyan-200/70">Titular del pase</span>
+              <p class="font-serif-elegant text-2xl sm:text-3xl text-white font-semibold mt-0.5">
+                Lucía <span class="text-amber-200/90 font-normal italic text-xl sm:text-2xl">(+ su acompañante favorito)</span>
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5">
+                <span class="block text-[10px] uppercase tracking-[0.2em] text-amber-200/75">Experiencia incluida</span>
+                <span class="block text-sm sm:text-base text-slate-100 font-medium mt-1">
+                  Recorrido oceánico completo para dos
+                </span>
+              </div>
+
+              <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5">
+                <span class="block text-[10px] uppercase tracking-[0.2em] text-amber-200/75">Validez</span>
+                <span class="block text-sm sm:text-base text-amber-200 font-medium mt-1">
+                  Fecha abierta · Por elegir juntos
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Línea punteada de corte de entrada -->
+          <div class="relative z-10 border-t border-dashed border-amber-200/35 my-2"></div>
+
+          <!-- Pie del pase -->
+          <div class="relative z-10 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+            <p class="font-serif-elegant italic text-base sm:text-lg text-cyan-100/90">
+              "Para perdernos entre el azul del mar, siempre juntos."
+            </p>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-300/15 border border-amber-300/35 text-amber-200 text-xs font-medium tracking-wider shrink-0">
+              ✦ VÁLIDO PARA 2 ✦
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Botones de acción: Descargar recuerdo PNG + Volver a ver -->
+      <div id="reveal-actions" class="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full opacity-0 translate-y-4 transition-all duration-1000 delay-500">
+        <button id="download-ticket-btn" type="button" class="btn-gold-glow w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full font-semibold text-sm sm:text-base cursor-pointer focus:outline-none">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          <span>Guardar recuerdo como imagen</span>
+        </button>
+
+        <button id="replay-btn" type="button" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-cyan-200/30 bg-slate-900/50 hover:bg-slate-800/70 text-cyan-100 text-sm transition-all cursor-pointer focus:outline-none">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M5.64 18.36A9 9 0 106.34 6.34L4 9"/>
+          </svg>
+          <span>Volver a vivir el viaje</span>
+        </button>
+      </div>
+
+      <!-- Notificación flotante sutil al descargar -->
+      <div id="toast-msg" class="mt-4 px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-300/40 text-emerald-100 text-xs sm:text-sm opacity-0 transition-opacity duration-500 pointer-events-none">
+        ✦ Tu pase conmemorativo se ha guardado en tu dispositivo ✦
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    /**
+     * ============================================================================
+     * 1. MOTOR DE AUDIO AMBIENTAL GENERATIVO (WEB AUDIO API)
+     *    Genera acordes cálidos y envolventes sin depender de archivos externos.
+     *    Evoluciona de un timbre estrellado nocturno a una atmósfera submarina.
+     * ============================================================================
+     */
+    class AmbientSoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.isUnderwater = false;
+        this.masterGain = null;
+        this.filterNode = null;
+        this.chordTimer = null;
+        this.chordIndex = 0;
+
+        // Progresión romántica en Fa Mayor / Re menor (acordes abiertos)
+        this.chords = [
+          [174.61, 220.00, 261.63, 329.63], // Fmaj7
+          [146.83, 220.00, 261.63, 329.63], // Dm9
+          [233.08, 293.66, 349.23, 440.00], // Bbmaj7
+          [130.81, 196.00, 261.63, 329.63]  // Csus/C
+        ];
+      }
+
+      init() {
+        if (this.ctx) return;
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioCtx();
+
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.value = 0.0001;
+
+        this.filterNode = this.ctx.createBiquadFilter();
+        this.filterNode.type = 'lowpass';
+        this.filterNode.frequency.value = 1100;
+        this.filterNode.Q.value = 0.8;
+
+        // Delay suave para sensación espacial
+        const delay = this.ctx.createDelay();
+        delay.delayTime.value = 0.45;
+        const feedback = this.ctx.createGain();
+        feedback.gain.value = 0.35;
+        delay.connect(feedback);
+        feedback.connect(delay);
+
+        this.filterNode.connect(this.masterGain);
+        this.filterNode.connect(delay);
+        delay.connect(this.masterGain);
+        this.masterGain.connect(this.ctx.destination);
+      }
+
+      playChord(freqs) {
+        if (!this.ctx || !this.isPlaying) return;
+        const now = this.ctx.currentTime;
+
+        freqs.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const noteGain = this.ctx.createGain();
+
+          osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+          // Ligerísima desafinación orgánica
+          osc.frequency.setValueAtTime(freq * (1 + (Math.random() - 0.5) * 0.003), now);
+
+          noteGain.gain.setValueAtTime(0.0001, now);
+          noteGain.gain.exponentialRampToValueAtTime(0.045, now + 1.8);
+          noteGain.gain.exponentialRampToValueAtTime(0.0001, now + 6.2);
+
+          osc.connect(noteGain);
+          noteGain.connect(this.filterNode);
+
+          osc.start(now);
+          osc.stop(now + 6.4);
+        });
+      }
+
+      toggle() {
+        this.init();
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+
+        if (!this.isPlaying) {
+          this.isPlaying = true;
+          const now = this.ctx.currentTime;
+          this.masterGain.gain.cancelScheduledValues(now);
+          this.masterGain.gain.setValueAtTime(Math.max(0.0001, this.masterGain.gain.value), now);
+          this.masterGain.gain.exponentialRampToValueAtTime(0.45, now + 1.5);
+
+          this.playChord(this.chords[this.chordIndex]);
+          this.chordTimer = setInterval(() => {
+            this.chordIndex = (this.chordIndex + 1) % this.chords.length;
+            this.playChord(this.chords[this.chordIndex]);
+          }, 5200);
+        } else {
+          this.isPlaying = false;
+          clearInterval(this.chordTimer);
+          const now = this.ctx.currentTime;
+          this.masterGain.gain.cancelScheduledValues(now);
+          this.masterGain.gain.setValueAtTime(Math.max(0.0001, this.masterGain.gain.value), now);
+          this.masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+        }
+        return this.isPlaying;
+      }
+
+      setUnderwaterMode(active) {
+        this.isUnderwater = active;
+        if (!this.ctx || !this.filterNode) return;
+        const now = this.ctx.currentTime;
+        // Al sumergirse en el mar, filtramos agudos para simular calidez bajo el agua
+        this.filterNode.frequency.exponentialRampToValueAtTime(active ? 540 : 1150, now + 3.0);
+      }
+    }
+
+    const soundEngine = new AmbientSoundEngine();
+
+    /**
+     * ============================================================================
+     * 2. MOTOR VISUAL EN CANVAS: CIELO ESTRELLADO -> TRANSICIÓN MARINA EN 5 FASES
+     * ============================================================================
+     */
+    const canvas = document.getElementById('universe-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+
+    // Estado de la escena: 'night' | 'transition' | 'ocean'
+    let sceneMode = 'night';
+    let transitionStartTime = 0;
+
+    // Entidades visuales
+    let stars = [];
+    let shootingStars = [];
+    let bubbles = [];
+    let fishes = [];
+    let jellyfish = [];
+    let seaTurtle = null;
+
+    // Control de estrellas fugaces automáticas y por interacción
+    let lastAutoMeteor = 0;
+    let lastPointerMeteor = 0;
+
+    function resizeCanvas() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      if (stars.length === 0) {
+        initNightStars();
+      }
+    }
+
+    function initNightStars() {
+      const count = Math.min(220, Math.floor((width * height) / 5500));
+      stars = [];
+      for (let i = 0; i < count; i++) {
+        const isGold = Math.random() < 0.28;
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 1.7 + 0.4,
+          baseAlpha: Math.random() * 0.65 + 0.25,
+          twinkleSpeed: Math.random() * 0.025 + 0.008,
+          phase: Math.random() * Math.PI * 2,
+          color: isGold ? '#f6e7b2' : '#e2e8f0',
+          fallSpeed: Math.random() * 2.2 + 1.4,
+          driftX: (Math.random() - 0.5) * 0.6
+        });
+      }
+    }
+
+    function spawnShootingStar(originX, originY) {
+      const startX = originX !== undefined ? originX : Math.random() * width * 0.85;
+      const startY = originY !== undefined ? originY : Math.random() * height * 0.45;
+      const angle = (Math.PI / 5) + (Math.random() * 0.25); // diagonal descendente
+      const speed = Math.random() * 7 + 9;
+      shootingStars.push({
+        x: startX,
+        y: startY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        length: Math.random() * 90 + 70,
+        alpha: 1,
+        decay: Math.random() * 0.018 + 0.016
+      });
+    }
+
+    function initOceanEntities() {
+      // Burbujas ascendentes
+      bubbles = [];
+      const bubbleCount = Math.min(75, Math.floor(width / 14));
+      for (let i = 0; i < bubbleCount; i++) {
+        bubbles.push({
+          x: Math.random() * width,
+          y: height + Math.random() * height,
+          r: Math.random() * 4.5 + 1.2,
+          vy: Math.random() * 1.3 + 0.55,
+          wobblePhase: Math.random() * Math.PI * 2,
+          wobbleSpeed: Math.random() * 0.03 + 0.01,
+          alpha: Math.random() * 0.45 + 0.15
+        });
+      }
+
+      // Bancos de peces estilizados
+      fishes = [];
+      const schoolCenters = [
+        { y: height * 0.28, dir: 1, count: 14, speed: 1.35, scale: 0.9 },
+        { y: height * 0.56, dir: -1, count: 16, speed: 1.65, scale: 1.05 },
+        { y: height * 0.74, dir: 1, count: 11, speed: 1.05, scale: 0.75 }
+      ];
+
+      schoolCenters.forEach((school) => {
+        for (let i = 0; i < school.count; i++) {
+          const startX = school.dir === 1
+            ? -80 - Math.random() * 360
+            : width + 80 + Math.random() * 360;
+          fishes.push({
+            x: startX,
+            y: school.y + (Math.random() - 0.5) * 95,
+            dir: school.dir,
+            speed: school.speed * (0.85 + Math.random() * 0.3),
+            size: (Math.random() * 7 + 9) * school.scale,
+            phase: Math.random() * Math.PI * 2,
+            alpha: Math.random() * 0.35 + 0.35
+          });
+        }
+      });
+
+      // Medusas bioluminiscentes
+      jellyfish = [];
+      const jellyCount = width < 640 ? 3 : 5;
+      for (let i = 0; i < jellyCount; i++) {
+        jellyfish.push({
+          x: (width / (jellyCount + 1)) * (i + 1) + (Math.random() - 0.5) * 80,
+          y: height + 80 + i * 110,
+          targetY: height * (0.22 + (i % 3) * 0.22),
+          radius: Math.random() * 14 + 20,
+          pulsePhase: Math.random() * Math.PI * 2,
+          driftPhase: Math.random() * Math.PI * 2,
+          hue: i % 2 === 0 ? 'rgba(125, 211, 252,' : 'rgba(165, 243, 252,'
+        });
+      }
+
+      // Tortuga marina majestuosa
+      seaTurtle = {
+        x: -140,
+        y: height * 0.44,
+        speed: Math.max(1.15, width / 950),
+        wingPhase: 0,
+        scale: width < 640 ? 0.82 : 1.15
+      };
+    }
+
+    // Interpolación lineal de color RGB
+    function lerp(a, b, t) {
+      return a + (b - a) * Math.max(0, Math.min(1, t));
+    }
+
+    function lerpColor(c1, c2, t) {
+      const r = Math.round(lerp(c1[0], c2[0], t));
+      const g = Math.round(lerp(c1[1], c2[1], t));
+      const b = Math.round(lerp(c1[2], c2[2], t));
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // Dibujo de rayos de luz solar atravesando el agua
+    function drawSunRays(time, opacity) {
+      if (opacity <= 0.01) return;
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+
+      const rayCount = 6;
+      for (let i = 0; i < rayCount; i++) {
+        const baseX = width * (0.15 + i * 0.15) + Math.sin(time * 0.0005 + i) * 35;
+        const topWidth = 35 + (i % 3) * 20;
+        const bottomWidth = topWidth * 3.4;
+        const slant = 90 + Math.cos(time * 0.0004 + i) * 30;
+
+        const grad = ctx.createLinearGradient(baseX, 0, baseX + slant, height * 0.88);
+        grad.addColorStop(0, `rgba(186, 230, 253, ${0.16 * opacity})`);
+        grad.addColorStop(0.55, `rgba(56, 189, 248, ${0.06 * opacity})`);
+        grad.addColorStop(1, 'rgba(6, 34, 58, 0)');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(baseX - topWidth / 2, 0);
+        ctx.lineTo(baseX + topWidth / 2, 0);
+        ctx.lineTo(baseX + slant + bottomWidth / 2, height * 0.88);
+        ctx.lineTo(baseX + slant - bottomWidth / 2, height * 0.88);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // Dibujo de un pez estilizado con movimiento de cola
+    function drawFish(f, time, opacity) {
+      ctx.save();
+      ctx.translate(f.x, f.y + Math.sin(time * 0.003 + f.phase) * 6);
+      ctx.scale(f.dir, 1);
+
+      const wag = Math.sin(time * 0.012 + f.phase) * (f.size * 0.28);
+      const grad = ctx.createLinearGradient(-f.size, 0, f.size, 0);
+      grad.addColorStop(0, `rgba(56, 189, 248, ${f.alpha * opacity * 0.4})`);
+      grad.addColorStop(0.7, `rgba(186, 230, 253, ${f.alpha * opacity})`);
+      grad.addColorStop(1, `rgba(246, 231, 178, ${f.alpha * opacity * 0.9})`);
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      // Cabeza / cuerpo hidrodinámico
+      ctx.moveTo(f.size, 0);
+      ctx.quadraticCurveTo(f.size * 0.2, -f.size * 0.45, -f.size * 0.65, -f.size * 0.14);
+      // Cola
+      ctx.lineTo(-f.size * 1.15, -f.size * 0.42 + wag);
+      ctx.lineTo(-f.size * 0.95, wag * 0.5);
+      ctx.lineTo(-f.size * 1.15, f.size * 0.42 + wag);
+      ctx.lineTo(-f.size * 0.65, f.size * 0.14);
+      ctx.quadraticCurveTo(f.size * 0.2, f.size * 0.45, f.size, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Dibujo de medusa bioluminiscente
+    function drawJellyfish(j, time, opacity) {
+      ctx.save();
+      const pulse = Math.sin(time * 0.0035 + j.pulsePhase);
+      const driftX = Math.sin(time * 0.0015 + j.driftPhase) * 24;
+      const rx = j.radius * (1 + pulse * 0.12);
+      const ry = j.radius * 0.78 * (1 - pulse * 0.1);
+
+      ctx.translate(j.x + driftX, j.y);
+
+      // Resplandor suave
+      const glow = ctx.createRadialGradient(0, 0, rx * 0.1, 0, 0, rx * 2.2);
+      glow.addColorStop(0, `${j.hue} ${0.28 * opacity})`);
+      glow.addColorStop(1, `${j.hue} 0)`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(0, 0, rx * 2.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Campana de la medusa
+      const bellGrad = ctx.createLinearGradient(0, -ry, 0, ry * 0.4);
+      bellGrad.addColorStop(0, `rgba(224, 242, 254, ${0.75 * opacity})`);
+      bellGrad.addColorStop(0.6, `${j.hue} ${0.42 * opacity})`);
+      bellGrad.addColorStop(1, `rgba(246, 231, 178, ${0.25 * opacity})`);
+
+      ctx.fillStyle = bellGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, rx, Math.PI, 0, false);
+      ctx.bezierCurveTo(rx, ry * 0.45, -rx, ry * 0.45, -rx, 0);
+      ctx.fill();
+
+      // Tentáculos ondulantes
+      ctx.strokeStyle = `${j.hue} ${0.45 * opacity})`;
+      ctx.lineWidth = 1.3;
+      const tentacles = 5;
+      for (let t = 0; t < tentacles; t++) {
+        const offsetX = ((t / (tentacles - 1)) - 0.5) * rx * 1.2;
+        ctx.beginPath();
+        ctx.moveTo(offsetX, ry * 0.2);
+        const len = j.radius * (2.1 + (t % 2) * 0.6);
+        const wave1 = Math.sin(time * 0.004 + j.pulsePhase + t) * 8;
+        const wave2 = Math.cos(time * 0.004 + j.pulsePhase + t) * 10;
+        ctx.bezierCurveTo(
+          offsetX + wave1, ry * 0.2 + len * 0.35,
+          offsetX - wave2, ry * 0.2 + len * 0.7,
+          offsetX + wave1 * 0.6, ry * 0.2 + len
+        );
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // Dibujo de tortuga marina estilizada nadando con elegancia
+    function drawSeaTurtle(turtle, time, opacity) {
+      if (!turtle || opacity <= 0.01) return;
+      ctx.save();
+      const bobY = Math.sin(time * 0.0022) * 14;
+      const flap = Math.sin(time * 0.0045);
+
+      ctx.translate(turtle.x, turtle.y + bobY);
+      ctx.scale(turtle.scale, turtle.scale);
+
+      // Aura luminosa sutil alrededor de la tortuga
+      const aura = ctx.createRadialGradient(0, 0, 10, 0, 0, 95);
+      aura.addColorStop(0, `rgba(186, 230, 253, ${0.18 * opacity})`);
+      aura.addColorStop(1, 'rgba(186, 230, 253, 0)');
+      ctx.fillStyle = aura;
+      ctx.beginPath();
+      ctx.arc(0, 0, 95, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = `rgba(186, 230, 253, ${0.78 * opacity})`;
+      ctx.strokeStyle = `rgba(246, 231, 178, ${0.55 * opacity})`;
+      ctx.lineWidth = 1.2;
+
+      // Aleta delantera superior
+      ctx.save();
+      ctx.translate(12, -14);
+      ctx.rotate(-0.35 + flap * 0.32);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(18, -38, -6, -54);
+      ctx.quadraticCurveTo(-18, -28, -8, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Aleta delantera inferior
+      ctx.save();
+      ctx.translate(12, 14);
+      ctx.rotate(0.35 - flap * 0.32);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(18, 38, -6, 54);
+      ctx.quadraticCurveTo(-18, 28, -8, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Aletas traseras pequeñas
+      ctx.beginPath();
+      ctx.ellipse(-34, -12, 12, 5, -0.5, 0, Math.PI * 2);
+      ctx.ellipse(-34, 12, 12, 5, 0.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Cabeza
+      ctx.beginPath();
+      ctx.ellipse(44, 0, 13, 8.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Caparazón principal
+      const shellGrad = ctx.createLinearGradient(-35, -24, 35, 24);
+      shellGrad.addColorStop(0, `rgba(56, 189, 248, ${0.72 * opacity})`);
+      shellGrad.addColorStop(0.5, `rgba(186, 230, 253, ${0.88 * opacity})`);
+      shellGrad.addColorStop(1, `rgba(246, 231, 178, ${0.75 * opacity})`);
+
+      ctx.fillStyle = shellGrad;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 36, 23, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Detalle geométrico del caparazón
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 21, 12, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // Bucle principal de animación
+    function renderLoop(now) {
+      ctx.clearRect(0, 0, width, height);
+
+      // Colores base noche vs océano profundo
+      const nightTop = [4, 7, 17];
+      const nightBot = [11, 20, 44];
+      const oceanTop = [8, 68, 104];
+      const oceanBot = [3, 24, 46];
+
+      let bgMix = 0;
+      let elapsed = 0;
+
+      if (sceneMode === 'transition' || sceneMode === 'ocean') {
+        elapsed = (now - transitionStartTime) / 1000;
+        // Transición del color del cielo al océano entre el segundo 3.2 y 8.2
+        bgMix = Math.max(0, Math.min(1, (elapsed - 3.2) / 5.0));
+      }
+
+      // 1. Fondo degradado
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+      bgGrad.addColorStop(0, lerpColor(nightTop, oceanTop, bgMix));
+      bgGrad.addColorStop(1, lerpColor(nightBot, oceanBot, bgMix));
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // 2. Estrellas nocturnas (y caída de estrellas en Fase 1)
+      const starsFalling = (sceneMode === 'transition' || sceneMode === 'ocean') && elapsed >= 0.2;
+      const starGlobalAlpha = sceneMode === 'night'
+        ? 1
+        : Math.max(0, 1 - Math.max(0, (elapsed - 2.8) / 3.8));
+
+      if (starGlobalAlpha > 0.01) {
+        stars.forEach((s) => {
+          if (starsFalling) {
+            s.y += s.fallSpeed * (1 + elapsed * 0.35);
+            s.x += s.driftX;
+            if (s.y > height + 10) {
+              s.y = -10;
+              s.x = Math.random() * width;
+            }
+          }
+
+          const twinkle = Math.sin(now * s.twinkleSpeed + s.phase) * 0.3 + 0.7;
+          const alpha = s.baseAlpha * twinkle * starGlobalAlpha;
+
+          ctx.save();
+          ctx.fillStyle = s.color;
+          ctx.globalAlpha = alpha;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Estela luminosa cuando caen en Fase 1
+          if (starsFalling && s.r > 1.0) {
+            ctx.strokeStyle = s.color;
+            ctx.lineWidth = s.r * 0.8;
+            ctx.globalAlpha = alpha * 0.45;
+            ctx.beginPath();
+            ctx.moveTo(s.x, s.y);
+            ctx.lineTo(s.x - s.driftX * 6, s.y - s.fallSpeed * 9);
+            ctx.stroke();
+          }
+          ctx.restore();
+        });
+      }
+
+      // 3. Estrellas fugaces en modo noche
+      if (sceneMode === 'night') {
+        if (now - lastAutoMeteor > 3800) {
+          spawnShootingStar();
+          lastAutoMeteor = now;
+        }
+      }
+
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const m = shootingStars[i];
+        m.x += m.vx;
+        m.y += m.vy;
+        m.alpha -= m.decay;
+
+        if (m.alpha <= 0) {
+          shootingStars.splice(i, 1);
+          continue;
+        }
+
+        const tailX = m.x - (m.vx / 12) * m.length;
+        const tailY = m.y - (m.vy / 12) * m.length;
+        const grad = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
+        grad.addColorStop(0, `rgba(255, 250, 230, ${m.alpha})`);
+        grad.addColorStop(0.35, `rgba(246, 231, 178, ${m.alpha * 0.65})`);
+        grad.addColorStop(1, 'rgba(212, 175, 55, 0)');
+
+        ctx.save();
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2.2;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+
+        ctx.fillStyle = `rgba(255, 255, 255, ${m.alpha})`;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // 4. Elementos submarinos (Fases 2, 3, 4 y 5)
+      if (sceneMode === 'transition' || sceneMode === 'ocean') {
+        // Fase 2 (desde 3.8s): Rayos de luz y burbujas
+        const raysOpacity = Math.max(0, Math.min(1, (elapsed - 3.8) / 2.5));
+        drawSunRays(now, raysOpacity);
+
+        const bubbleOpacity = Math.max(0, Math.min(1, (elapsed - 3.8) / 2.0));
+        if (bubbleOpacity > 0.01) {
+          bubbles.forEach((b) => {
+            b.y -= b.vy;
+            const wx = Math.sin(now * b.wobbleSpeed + b.wobblePhase) * 1.2;
+            b.x += wx * 0.25;
+            if (b.y < -15) {
+              b.y = height + 15;
+              b.x = Math.random() * width;
+            }
+
+            ctx.save();
+            ctx.strokeStyle = `rgba(224, 242, 254, ${b.alpha * bubbleOpacity})`;
+            ctx.fillStyle = `rgba(186, 230, 253, ${b.alpha * 0.25 * bubbleOpacity})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+          });
+        }
+
+        // Fase 3 (desde 7.6s): Bancos de peces
+        const fishOpacity = Math.max(0, Math.min(1, (elapsed - 7.6) / 1.8));
+        if (fishOpacity > 0.01) {
+          fishes.forEach((f) => {
+            f.x += f.speed * f.dir;
+            if (f.dir === 1 && f.x > width + 90) f.x = -90;
+            if (f.dir === -1 && f.x < -90) f.x = width + 90;
+            drawFish(f, now, fishOpacity);
+          });
+        }
+
+        // Fase 4 (desde 11.4s): Medusas luminosas y tortuga marina
+        const deepLifeOpacity = Math.max(0, Math.min(1, (elapsed - 11.4) / 1.8));
+        if (deepLifeOpacity > 0.01) {
+          jellyfish.forEach((j) => {
+            if (j.y > j.targetY) {
+              j.y -= 0.85;
+            }
+            drawJellyfish(j, now, deepLifeOpacity);
+          });
+
+          if (seaTurtle) {
+            seaTurtle.x += seaTurtle.speed;
+            if (seaTurtle.x > width + 180) {
+              seaTurtle.x = -160;
+            }
+            drawSeaTurtle(seaTurtle, now, deepLifeOpacity);
+          }
+        }
+      }
+
+      requestAnimationFrame(renderLoop);
+    }
+
+    /**
+     * ============================================================================
+     * 3. INTERACCIÓN DE SCROLL, CONSTELACIÓN Y ESTRELLAS FUGACES AL TOCAR
+     * ============================================================================
+     */
+    const audioToggleBtn = document.getElementById('audio-toggle');
+    const audioIcon = document.getElementById('audio-icon');
+    const audioLabel = document.getElementById('audio-label');
+
+    audioToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const playing = soundEngine.toggle();
+      if (playing) {
+        audioLabel.textContent = 'Sonando';
+        audioToggleBtn.classList.add('border-amber-300/70', 'bg-amber-300/15');
+        audioIcon.innerHTML = `
+          <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/>
+          </svg>`;
+      } else {
+        audioLabel.textContent = 'Música';
+        audioToggleBtn.classList.remove('border-amber-300/70', 'bg-amber-300/15');
+        audioIcon.innerHTML = `
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/>
+          </svg>`;
+      }
+    });
+
+    // Estrellas fugaces al tocar, hacer clic o deslizar por la pantalla
+    function handlePointerSparkle(x, y, isClick) {
+      if (sceneMode !== 'night') return;
+      const now = performance.now();
+      if (isClick) {
+        spawnShootingStar(x, y);
+        lastPointerMeteor = now;
+      } else if (now - lastPointerMeteor > 420) {
+        spawnShootingStar(x, y);
+        lastPointerMeteor = now;
+      }
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target.closest('button') || e.target.closest('a')) return;
+      handlePointerSparkle(e.clientX, e.clientY, true);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      handlePointerSparkle(e.clientX, e.clientY, false);
+    }, { passive: true });
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.target.closest('button') || e.target.closest('a')) return;
+      const touch = e.touches[0];
+      if (touch) handlePointerSparkle(touch.clientX, touch.clientY, true);
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      if (touch) handlePointerSparkle(touch.clientX, touch.clientY, false);
+    }, { passive: true });
+
+    // Navegación suave al pulsar las estrellas de la barra superior
+    document.querySelectorAll('.constellation-node').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const el = document.getElementById(targetId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Actualización de la constelación de progreso según el scroll
+    const constellationLine = document.getElementById('constellation-line');
+    const starNodes = [
+      document.getElementById('star-node-1'),
+      document.getElementById('star-node-2'),
+      document.getElementById('star-node-3'),
+      document.getElementById('star-node-4')
+    ];
+    const yearSections = [
+      document.getElementById('year-1'),
+      document.getElementById('year-2'),
+      document.getElementById('year-3'),
+      document.getElementById('year-4')
+    ];
+
+    function updateScrollProgress() {
+      if (sceneMode !== 'night') return;
+      const scrollY = window.scrollY;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const pct = Math.max(0, Math.min(100, (scrollY / maxScroll) * 100));
+      constellationLine.style.width = `${pct * 0.96}%`;
+
+      const triggerLine = scrollY + window.innerHeight * 0.58;
+      yearSections.forEach((sec, idx) => {
+        if (!sec) return;
+        const top = sec.offsetTop;
+        const nodeBtn = starNodes[idx].parentElement;
+        if (triggerLine >= top) {
+          starNodes[idx].classList.remove('text-amber-200/35');
+          starNodes[idx].classList.add('text-amber-300');
+          nodeBtn.classList.add('active');
+        } else {
+          starNodes[idx].classList.add('text-amber-200/35');
+          starNodes[idx].classList.remove('text-amber-300');
+          nodeBtn.classList.remove('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
+    // IntersectionObserver para aparición elegante de tarjetas
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.reveal-section').forEach((sec) => revealObserver.observe(sec));
+
+    /**
+     * ============================================================================
+     * 4. SECUENCIA CINEMATOGRÁFICA DE 5 FASES (~15.5 SEGUNDOS)
+     * ============================================================================
+     */
+    const discoverBtn = document.getElementById('discover-btn');
+    const storyMain = document.getElementById('story-main');
+    const topHud = document.getElementById('top-hud');
+    const cinematicOverlay = document.getElementById('cinematic-overlay');
+    const finalReveal = document.getElementById('final-reveal');
+
+    const phrases = [
+      document.getElementById('phrase-1'),
+      document.getElementById('phrase-2'),
+      document.getElementById('phrase-3'),
+      document.getElementById('phrase-4')
+    ];
+
+    let sequenceTimeouts = [];
+
+    function clearSequenceTimeouts() {
+      sequenceTimeouts.forEach((id) => clearTimeout(id));
+      sequenceTimeouts = [];
+    }
+
+    function showOnlyPhrase(index) {
+      phrases.forEach((p, idx) => {
+        if (idx === index) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+    }
+
+    function startCinematicTransition() {
+      clearSequenceTimeouts();
+
+      // Bloquear scroll y ocultar contenido de noche
+      document.body.classList.add('locked-scroll');
+      storyMain.classList.add('opacity-0', 'pointer-events-none');
+      topHud.classList.add('opacity-0', 'pointer-events-none');
+
+      // Reiniciar estado final por si es repetición
+      finalReveal.classList.add('hidden');
+      document.getElementById('reveal-header').classList.add('opacity-0', 'translate-y-4');
+      document.getElementById('ticket-wrapper').classList.add('opacity-0', 'scale-95');
+      document.getElementById('reveal-actions').classList.add('opacity-0', 'translate-y-4');
+
+      // Preparar entidades marinas y arrancar transición en canvas
+      initOceanEntities();
+      sceneMode = 'transition';
+      transitionStartTime = performance.now();
+      soundEngine.setUnderwaterMode(true);
+
+      cinematicOverlay.classList.remove('hidden');
+      cinematicOverlay.classList.add('flex');
+      showOnlyPhrase(-1);
+
+      // FASE 1 (0.3s -> 3.4s): Estrellas caen + Frase 1
+      sequenceTimeouts.push(setTimeout(() => showOnlyPhrase(0), 300));
+      sequenceTimeouts.push(setTimeout(() => showOnlyPhrase(-1), 3300));
+
+      // FASE 2 (4.1s -> 7.2s): Profundidad marina, rayos y burbujas + Frase 2
+      sequenceTimeouts.push(setTimeout(() => showOnlyPhrase(1), 4100));
+      sequenceTimeouts.push(setTimeout(() => showOnlyPhrase(-1), 7100));
+
+      // FASE 3 (7.9s -> 11.0s): Bancos de peces + Frase 3
+      sequenceTimeouts.push(setTimeout(() => showOnlyPhrase(2), 7900));
+      sequenceTimeouts.push(setTimeout(() => showOnlyPhrase(-1), 10900));
+
+      // FASE 4 (11.7s -> 14.8s): Medusas y tortuga marina + Frase 4
+      sequenceTimeouts.push(setTimeout(() => showOnlyPhrase(3), 11700));
+      sequenceTimeouts.push(setTimeout(() => showOnlyPhrase(-1), 14700));
+
+      // FASE 5 (15.5s): Revelación final del Pase al Acuario de Sevilla
+      sequenceTimeouts.push(setTimeout(() => {
+        sceneMode = 'ocean';
+        cinematicOverlay.classList.add('hidden');
+        cinematicOverlay.classList.remove('flex');
+
+        finalReveal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          document.getElementById('reveal-header').classList.remove('opacity-0', 'translate-y-4');
+          document.getElementById('ticket-wrapper').classList.remove('opacity-0', 'scale-95');
+          document.getElementById('reveal-actions').classList.remove('opacity-0', 'translate-y-4');
+        });
+      }, 15500));
+    }
+
+    discoverBtn.addEventListener('click', startCinematicTransition);
+
+    document.getElementById('replay-btn').addEventListener('click', () => {
+      startCinematicTransition();
+    });
+
+    /**
+     * ============================================================================
+     * 5. EFECTO 3D INTERACTIVO (TILT + BRILLO HOLOGRÁFICO) EN EL PASE VIP
+     * ============================================================================
+     */
+    const ticketCard = document.getElementById('ticket-card');
+    const ticketSheen = document.getElementById('ticket-sheen');
+
+    function applyTicketTilt(clientX, clientY) {
+      const rect = ticketCard.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -9;
+      const rotateY = ((x - centerX) / centerX) * 9;
+
+      ticketCard.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+      ticketSheen.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
+      ticketSheen.style.setProperty('--my', `${(y / rect.height) * 100}%`);
+    }
+
+    function resetTicketTilt() {
+      ticketCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      ticketSheen.style.setProperty('--mx', '50%');
+      ticketSheen.style.setProperty('--my', '50%');
+    }
+
+    ticketCard.addEventListener('mousemove', (e) => {
+      applyTicketTilt(e.clientX, e.clientY);
+    });
+
+    ticketCard.addEventListener('mouseleave', resetTicketTilt);
+
+    ticketCard.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      if (touch) applyTicketTilt(touch.clientX, touch.clientY);
+    }, { passive: true });
+
+    ticketCard.addEventListener('touchend', resetTicketTilt);
+
+    /**
+     * ============================================================================
+     * 6. GENERADOR DE IMAGEN PNG DE ALTA RESOLUCIÓN PARA DESCARGAR EL RECUERDO
+     * ============================================================================
+     */
+    function downloadCommemorativeTicket() {
+      const exportCanvas = document.createElement('canvas');
+      const w = 1200;
+      const h = 720;
+      exportCanvas.width = w;
+      exportCanvas.height = h;
+      const ectx = exportCanvas.getContext('2d');
+
+      // Fondo marino profundo elegante
+      const bg = ectx.createLinearGradient(0, 0, w, h);
+      bg.addColorStop(0, '#051f38');
+      bg.addColorStop(0.5, '#0a3d62');
+      bg.addColorStop(1, '#04172b');
+      ectx.fillStyle = bg;
+      ectx.fillRect(0, 0, w, h);
+
+      // Rayos sutiles de luz superior
+      for (let i = 0; i < 4; i++) {
+        const rayGrad = ectx.createLinearGradient(250 + i * 220, 0, 380 + i * 220, h);
+        rayGrad.addColorStop(0, 'rgba(186, 230, 253, 0.12)');
+        rayGrad.addColorStop(1, 'rgba(186, 230, 253, 0)');
+        ectx.fillStyle = rayGrad;
+        ectx.beginPath();
+        ectx.moveTo(220 + i * 220, 0);
+        ectx.lineTo(310 + i * 220, 0);
+        ectx.lineTo(520 + i * 220, h);
+        ectx.lineTo(300 + i * 220, h);
+        ectx.closePath();
+        ectx.fill();
+      }
+
+      // Burbujas decorativas en la tarjeta descargable
+      for (let i = 0; i < 32; i++) {
+        const bx = 60 + Math.random() * (w - 120);
+        const by = 60 + Math.random() * (h - 120);
+        const br = 2 + Math.random() * 6;
+        ectx.strokeStyle = 'rgba(186, 230, 253, 0.25)';
+        ectx.lineWidth = 1.5;
+        ectx.beginPath();
+        ectx.arc(bx, by, br, 0, Math.PI * 2);
+        ectx.stroke();
+      }
+
+      // Marco dorado doble
+      const pad = 42;
+      ectx.strokeStyle = '#d4af37';
+      ectx.lineWidth = 3;
+      roundRect(ectx, pad, pad, w - pad * 2, h - pad * 2, 32);
+      ectx.stroke();
+
+      ectx.strokeStyle = 'rgba(246, 231, 178, 0.35)';
+      ectx.lineWidth = 1.2;
+      roundRect(ectx, pad + 12, pad + 12, w - (pad + 12) * 2, h - (pad + 12) * 2, 24);
+      ectx.stroke();
+
+      // Textos superiores
+      ectx.fillStyle = '#f6e7b2';
+      ectx.font = '600 20px "Plus Jakarta Sans", sans-serif';
+      ectx.fillText('PASE ESPECIAL  ·  4.º ANIVERSARIO', 96, 126);
+
+      // Título principal: ACUARIO DE SEVILLA
+      const titleGrad = ectx.createLinearGradient(96, 150, 760, 210);
+      titleGrad.addColorStop(0, '#fef3c7');
+      titleGrad.addColorStop(0.5, '#f6e7b2');
+      titleGrad.addColorStop(1, '#bae6fd');
+      ectx.fillStyle = titleGrad;
+      ectx.font = '700 62px "Cormorant Garamond", Georgia, serif';
+      ectx.fillText('ACUARIO DE SEVILLA', 96, 198);
+
+      // Línea divisoria dorada
+      ectx.strokeStyle = 'rgba(246, 231, 178, 0.35)';
+      ectx.lineWidth = 1.5;
+      ectx.beginPath();
+      ectx.moveTo(96, 234);
+      ectx.lineTo(w - 96, 234);
+      ectx.stroke();
+
+      // Titular del pase
+      ectx.fillStyle = 'rgba(186, 230, 253, 0.8)';
+      ectx.font = '500 18px "Plus Jakarta Sans", sans-serif';
+      ectx.fillText('TITULAR DEL PASE', 96, 292);
+
+      ectx.fillStyle = '#ffffff';
+      ectx.font = '700 46px "Cormorant Garamond", Georgia, serif';
+      ectx.fillText('Lucía (+ su acompañante favorito)', 96, 346);
+
+      // Cajas de información (Experiencia + Fecha abierta)
+      ectx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+      roundRect(ectx, 96, 392, 480, 110, 18);
+      ectx.fill();
+      roundRect(ectx, 604, 392, 500, 110, 18);
+      ectx.fill();
+
+      ectx.fillStyle = '#f6e7b2';
+      ectx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+      ectx.fillText('EXPERIENCIA INCLUIDA', 124, 432);
+      ectx.fillText('VALIDEZ DEL PASE', 632, 432);
+
+      ectx.fillStyle = '#f8fafc';
+      ectx.font = '500 23px "Plus Jakarta Sans", sans-serif';
+      ectx.fillText('Recorrido oceánico completo para 2', 124, 472);
+
+      ectx.fillStyle = '#fde68a';
+      ectx.fillText('Fecha abierta · Por elegir juntos', 632, 472);
+
+      // Línea punteada inferior
+      ectx.save();
+      ectx.setLineDash([10, 10]);
+      ectx.strokeStyle = 'rgba(246, 231, 178, 0.45)';
+      ectx.lineWidth = 2;
+      ectx.beginPath();
+      ectx.moveTo(96, 548);
+      ectx.lineTo(w - 96, 548);
+      ectx.stroke();
+      ectx.restore();
+
+      // Frase romántica final
+      ectx.fillStyle = '#e0f2fe';
+      ectx.font = 'italic 30px "Cormorant Garamond", Georgia, serif';
+      ectx.fillText('“Para perdernos entre el azul del mar, siempre juntos.”', 96, 616);
+
+      ectx.fillStyle = '#f6e7b2';
+      ectx.font = '600 18px "Plus Jakarta Sans", sans-serif';
+      ectx.textAlign = 'right';
+      ectx.fillText('✦ VÁLIDO PARA DOS ✦', w - 96, 614);
+
+      // Descarga automática
+      const link = document.createElement('a');
+      link.download = 'Regalo_Aniversario_Lucia_Acuario_Sevilla.png';
+      link.href = exportCanvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Mostrar confirmación visual
+      const toast = document.getElementById('toast-msg');
+      toast.classList.remove('opacity-0');
+      setTimeout(() => toast.classList.add('opacity-0'), 4200);
+    }
+
+    function roundRect(context, x, y, width, height, radius) {
+      context.beginPath();
+      context.moveTo(x + radius, y);
+      context.arcTo(x + width, y, x + width, y + height, radius);
+      context.arcTo(x + width, y + height, x, y + height, radius);
+      context.arcTo(x, y + height, x, y, radius);
+      context.arcTo(x, y, x + width, y, radius);
+      context.closePath();
+    }
+
+    document.getElementById('download-ticket-btn').addEventListener('click', downloadCommemorativeTicket);
+
+    // Inicialización al cargar la ventana
+    window.addEventListener('resize', resizeCanvas);
+    window.onload = function () {
+      resizeCanvas();
+      updateScrollProgress();
+      requestAnimationFrame(renderLoop);
+    };
+  </script>
+</body>
+</html>
